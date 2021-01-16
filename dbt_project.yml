@@ -51,11 +51,11 @@ vars:
   crm_warehouse_company_sources: []
   crm_warehouse_contact_sources: []
   crm_warehouse_conversations_sources: []
-  marketing_warehouse_ad_campaign_sources: []
-  marketing_warehouse_ad_campaign_performance_sources: []
-  marketing_warehouse_ad_performance_sources: []
-  marketing_warehouse_ad_group_sources: []
-  marketing_warehouse_ad_sources: []
+  marketing_warehouse_ad_campaign_sources: ['facebook_ads']
+  marketing_warehouse_ad_campaign_performance_sources: ['facebook_ads']
+  marketing_warehouse_ad_performance_sources: ['facebook_ads']
+  marketing_warehouse_ad_group_sources: ['facebook_ads']
+  marketing_warehouse_ad_sources: ['facebook_ads']
   marketing_warehouse_email_event_sources: []
   marketing_warehouse_email_list_sources: []
   marketing_warehouse_deal_sources: []
@@ -82,9 +82,9 @@ vars:
   stg_looker_usage_schema:
   stg_looker_usage_stats_table:
 
-  stg_facebook_ads_id-prefix: fbads-
-  stg_facebook_ads_etl: segment
-  stg_facebook_ads_stitch_database:
+  stg_facebook_ads_id-prefix: fbads_goes-
+  stg_facebook_ads_etl: stitch
+  stg_facebook_ads_stitch_database: stitch_facebook_ads
   stg_facebook_ads_stitch_schema: stitch_facebook_ads
   stg_facebook_ads_stitch_ad_performance_table: "{{ source('stitch_facebook_ads', 'insights') }}"
   stg_facebook_ads_stitch_ad_performance_table_snowflake: "{{ source('stitch_facebook_ads', 'ads_insights') }}"
@@ -99,7 +99,7 @@ vars:
   stg_facebook_ads_segment_ads_table: "{{ source('segment_facebook_ads', 'ads') }}"
   stg_facebook_ads_segment_campaigns_table: "{{ source('segment_facebook_ads', 'campaigns') }}"
 
-  stg_google_ads_id-prefix: gads-
+  stg_google_ads_id-prefix: gads_goes-
   stg_google_ads_etl: stitch
   stg_google_ads_stitch_database:
   stg_google_ads_stitch_schema: stitch_google_ads

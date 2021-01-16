@@ -84,8 +84,8 @@ vars:
 
   stg_facebook_ads_id-prefix: fbads-
   stg_facebook_ads_etl: segment
-  stg_facebook_ads_stitch_database: ra-development
-  stg_facebook_ads_stitch_schema: stitch_facebook_ads
+  stg_facebook_ads_stitch_database: fbads_goes
+  stg_facebook_ads_stitch_schema: fbads_goes
   stg_facebook_ads_stitch_ad_performance_table: "{{ source('stitch_facebook_ads', 'insights') }}"
   stg_facebook_ads_stitch_ad_performance_table_snowflake: "{{ source('stitch_facebook_ads', 'ads_insights') }}"
   stg_facebook_ads_stitch_ad_groups_table: "{{ source('stitch_facebook_ads', 'ad_sets') }}"
