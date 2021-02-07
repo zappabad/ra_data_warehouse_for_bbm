@@ -5,7 +5,7 @@ with ad_campaign_performance as
   (
 
     {% for source in var('marketing_warehouse_ad_campaign_performance_sources') %}
-      {% set relation_source = 'stg_' + source + '_campaign_performance' %}
+      {% set relation_source = 'stg_' + source + '_ad_campaign_performance' %}
 
       select
         '{{source}}' as source,

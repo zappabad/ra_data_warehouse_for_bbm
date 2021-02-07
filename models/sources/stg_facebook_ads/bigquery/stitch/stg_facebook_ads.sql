@@ -13,7 +13,7 @@ renamed as (
 
     select
     cast(id as string)              as ad_id,
-    status      as ad_status,
+    name       as ad_name,
     cast(null as string)        as ad_type,
     cast(null as string)   as ad_final_urls,
     cast(adset_id as string) as ad_group_id,

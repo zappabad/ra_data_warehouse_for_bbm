@@ -25,10 +25,10 @@ select *,
             when ad_network = 'Facebook Ads' then 'paid_social'
             when ad_network in ('Mailchimp','Hubspot Email') then 'email'
             else null end as utm_medium,
-       case when ad_campaign_name like '%Winter 2019%' then 'winter_2019'
-            when ad_campaign_name like '%Summer 2020%' then 'summer_2020'
-            when ad_campaign_name = 'Rittman Analytics Newsletter December 2020' then 'Analytics Solutions December 2020'
-       else lower(ad_campaign_name) end as utm_campaign
+       case when campaign_name like '%Winter 2019%' then 'winter_2019'
+            when campaign_name like '%Summer 2020%' then 'summer_2020'
+            when campaign_name = 'Rittman Analytics Newsletter December 2020' then 'Analytics Solutions December 2020'
+       else lower(campaign_name) end as ad_campaign_name
  from campaigns
 
  {% else %}

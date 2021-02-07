@@ -14,7 +14,7 @@ with source as (
 renamed as (
 
     select
-    cast(id as string)      as campaign_id,
+    cast(id as string)      as ad_campaign_id,
     name    as campaign_name,
     effective_status          as ad_campaign_status,
     effective_status as campaign_effective_status,

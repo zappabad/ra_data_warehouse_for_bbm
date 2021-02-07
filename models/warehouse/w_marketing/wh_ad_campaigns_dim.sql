@@ -12,7 +12,7 @@ WITH campaigns AS
   (
   SELECT * from {{ ref('int_ad_campaigns') }}
 )
-select {{ dbt_utils.surrogate_key(['ad_campaign_id']) }}  as ad_campaign_pk,
+select {{ dbt_utils.surrogate_key(['campaign_id']) }}  as ad_campaign_pk,
        c.*
 from campaigns c
 

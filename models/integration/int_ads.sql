@@ -25,13 +25,12 @@ with ads as
  )
 select
     a.ad_id,
-    a.ad_status,
     a.ad_type,
     a.ad_final_urls,
     a.ad_group_id,
     a.ad_bid_type,
     a.ad_utm_parameters,
-    lower(coalesce(a.ad_utm_campaign,c.ad_campaign_name)) as ad_utm_campaign,
+    lower(coalesce(a.ad_utm_campaign,c.campaign_name)) as ad_utm_campaign,
     lower(a.ad_utm_content) as ad_utm_content,
     coalesce(a.ad_utm_medium,'paid') as ad_utm_medium,
     case when a.ad_network = 'Google Ads' then coalesce(a.ad_utm_source,'adwords')
