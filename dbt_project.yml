@@ -52,7 +52,7 @@ vars:
   crm_warehouse_contact_sources: []
   crm_warehouse_conversations_sources: []
   marketing_warehouse_ad_campaign_sources: ['facebook_ads']
-  marketing_warehouse_ad_campaign_performance_sources: ['facebook_ads']
+  marketing_warehouse_ad_campaign_performance_sources: []
   marketing_warehouse_ad_performance_sources: ['facebook_ads']
   marketing_warehouse_ad_group_sources: ['facebook_ads']
   marketing_warehouse_ad_sources: ['facebook_ads']
