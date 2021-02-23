@@ -1,9 +1,11 @@
+
 {% if not var("enable_marketing_warehouse") or not var("ad_campaigns_only") %}
 {{
     config(
         enabled=false
     )
 }}
+
 {% else %}
 {{
     config(
@@ -11,6 +13,7 @@
     )
 }}
 {% endif %}
+
 WITH
 ad_performance AS
   (

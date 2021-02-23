@@ -10,7 +10,5 @@ FROM
     FROM
       {{ relation }}
   )
-WHERE
-  _sdc_batched_at = max_sdc_batched_at
 
 {%- endmacro -%}

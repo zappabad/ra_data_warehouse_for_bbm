@@ -82,7 +82,7 @@ vars:
   stg_looker_usage_schema:
   stg_looker_usage_stats_table:
 
-  stg_facebook_ads_id-prefix: fbads_goes
+  stg_facebook_ads_id-prefix: facebook_ads
   stg_facebook_ads_etl: stitch
   stg_facebook_ads_stitch_database: 
   stg_facebook_ads_stitch_schema: fbads_goes
@@ -95,7 +95,7 @@ vars:
   stg_facebook_ads_segment_database:
   stg_facebook_ads_segment_schema: facebook_ads
   stg_facebook_ads_segment_ad_performance_table: "{{ source('segment_facebook_ads', 'insights') }}"
-  stg_facebook_ads_segment_ad_groups_table: "{{ source('stitch_facebook_ads', 'ad_adsets') }}"
+  stg_facebook_ads_segment_ad_groups_table: "facebook_ads.ad_sets"
   stg_facebook_ads_segment_ads_table: "{{ source('segment_facebook_ads', 'ads') }}"
   stg_facebook_ads_segment_campaigns_table: "{{ source('segment_facebook_ads', 'campaigns') }}"
 
