@@ -1,12 +1,21 @@
+{{config
+  (enabled =
+      (target.type == 'bigquery' and var("stg_google_ads_etl") == 'transfer')
+   )
+}}
+{% if var("marketing_warehouse_ad_performance_sources") %}
+{% if 'google_ads' in var("marketing_warehouse_ad_performance_sources") %}
+
+
 WITH campaignBase AS (SELECT /* Antigo stg_campaignBase.sql    cb */
 campaignId,
 externalCustomerId,
 Date,
-{{extract('ISOWEEK')}},
-{{extract('month')}},
-{{extract('year')}},
+{{gads_extract('ISOWEEK')}},
+{{gads_extract('month')}},
+{{gads_extract('year')}},
 sum(clicks) Clicks, 
-{{cost()}}
+{{gads_cost()}}
 FROM {{var('stg_google_ads_transfer_campaignStats')}}
 GROUP BY 1,2,3,4,5,6),
 
@@ -26,9 +35,9 @@ campaignImpressions AS (SELECT   /* im */
 campaignId, 
 externalCustomerId,
 Date,
-{{extract('ISOWEEK')}},
-{{extract('month')}},
-{{extract('year')}},
+{{gads_extract('ISOWEEK')}},
+{{gads_extract('month')}},
+{{gads_extract('year')}},
 sum(Impressions) impr
 FROM {{var('stg_google_ads_transfer_campaignStats')}}  /* de t_campaignStats para stg_google_ads_transfer_campaignStats*/
 WHERE clickType = "URL_CLICKS"
@@ -38,9 +47,9 @@ campaignConversions AS (SELECT /* Antigo stg_campaignConversions    cc */
 campaignId, 
 externalCustomerId,
 Date,
-{{extract('ISOWEEK')}},
-{{extract('month')}},
-{{extract('year')}},
+{{gads_extract('ISOWEEK')}},
+{{gads_extract('month')}},
+{{gads_extract('year')}},
 SUM(Conversions) Conversions,
 SUM(CASE WHEN ConversionTypeName = {{var('convName1')}} THEN Conversions ELSE 0 END) as conv_obrigado,
 SUM(CASE WHEN ConversionTypeName = {{var('convName2')}} THEN Conversions ELSE 0 END) as conv_blog,
@@ -48,9 +57,9 @@ WITH campaignBase AS (SELECT /* Antigo stg_campaignBase.sql    cb */
 campaignId,
 externalCustomerId,
 Date,
-{{extract('ISOWEEK')}},
-{{extract('month')}},
-{{extract('year')}},
+{{gads_extract('ISOWEEK')}},
+{{gads_extract('month')}},
+{{gads_extract('year')}},
 sum(clicks) Clicks, 
 {{cost()}}
 FROM {{var('stg_google_ads_transfer_campaignStats')}}
@@ -72,9 +81,9 @@ campaignImpressions AS (SELECT   /* im */
 campaignId, 
 externalCustomerId,
 Date,
-{{extract('ISOWEEK')}},
-{{extract('month')}},
-{{extract('year')}},
+{{gads_extract('ISOWEEK')}},
+{{gads_extract('month')}},
+{{gads_extract('year')}},
 sum(Impressions) impr
 FROM {{var('stg_google_ads_transfer_campaignStats')}}  /* de t_campaignStats para stg_google_ads_transfer_campaignStats*/
 WHERE clickType = "URL_CLICKS"
@@ -84,9 +93,9 @@ campaignConversions AS (SELECT /* Antigo stg_campaignConversions    cc */
 campaignId, 
 externalCustomerId,
 Date,
-{{extract('ISOWEEK')}},
-{{extract('month')}},
-{{extract('year')}},
+{{gads_extract('ISOWEEK')}},
+{{gads_extract('month')}},
+{{gads_extract('year')}},
 SUM(Conversions) Conversions,
 SUM(CASE WHEN ConversionTypeName = {{var('convName1')}} THEN Conversions ELSE 0 END) as conv_obrigado,
 SUM(CASE WHEN ConversionTypeName = {{var('convName2')}} THEN Conversions ELSE 0 END) as conv_blog,
@@ -125,5 +134,5 @@ AND cb.year = cc.year
 AND cb.Date = cc.Date
 GROUP BY 1,2,3,4,5,6,7,8,9,10,11,12,13,14
 
-/* Perguntar sobre as abreviações dos renames e saber o motivo  do dbt não ler os fdp
-   Acredito que algumas querys buscam dados da mesma tabela que foi renoameada mais cedo nas variáveis*/
+{% else %} {{config(enabled=false)}} {% endif %}
+{% else %} {{config(enabled=false)}} {% endif %}
