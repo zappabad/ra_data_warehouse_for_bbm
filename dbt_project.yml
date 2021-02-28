@@ -112,18 +112,21 @@ vars:
   stg_google_ads_segment_ad_groups_table: "{{ source('segment_google_ads', 'ad_groups') }}"
   stg_google_ads_segment_ads_table: "{{ source('segment_google_ads', 'ads') }}"
   stg_google_ads_segment_campaigns_table: "{{ source('segment_google_ads', 'campaigns') }}"
-  stg_google_ads_transfer_campaignStats: "{{source('gads_goes', 'p_CampaignStats_5726034613')}}"
-  stg_google_ads_transfer_campaign: "{{source('gads_goes', 'p_Campaign_5726034613')}}"
-  stg_google_ads_transfer_ads: "{{source('gads_goes', 'p_Ad_5726034613')}}"
-  stg_google_ads_transfer_adStats: "{{source('gads_goes', 'p_AdBasicStats_5726034613')}}"
-  stg_google_ads_transfer_t_campaignConv: "{{source('gads_goes', 'p_CampaignConversionStats_5726034613')}}"
-  stg_google_ads_transfer_adGroupStats: "{{source('gads_goes', 'p_AdGroupStats_5726034613')}}"
-  stg_google_ads_transfer_adGroup: "{{source('gads_goes', 'p_AdGroup_5726034613')}}"
-  stg_google_ads_transfer_adGroupConv: "{{source('gads_goes', 'p_AdGroupConversionStats_5726034613')}}"
-  convName1: "Obrigado Pré GT"
-  convName2: "Blog de Lançamento Adws FEB/20"
-  convName3: "Obrigado - Ebook Opções"
-  ads_campaigns_only: true
+  stg_google_ads_transfer_database: gads_goes
+  stg_google_ads_transfer_schema: transfer_google_ads
+  stg_google_ads_transfer_campaignStats: "databases-297008.gads_goes.p_CampaignStats_5726034613"
+  stg_google_ads_transfer_campaign: "databases-297008.gads_goes.p_Campaign_5726034613"
+  stg_google_ads_transfer_ads: "databases-297008.gads_goes.p_Ad_5726034613"
+  stg_google_ads_transfer_adStats: "databases-297008.gads_goes.p_AdBasicStats_5726034613"
+  stg_google_ads_transfer_campaignConv: "databases-297008.gads_goes.p_CampaignConversionStats_5726034613"
+  stg_google_ads_transfer_adGroupStats: "databases-297008.gads_goes.p_AdGroupStats_5726034613"
+  stg_google_ads_transfer_adGroup: "databases-297008.gads_goes.p_AdGroup_5726034613"
+  stg_google_ads_transfer_adGroupConv: "databases-297008.gads_goes.p_AdGroupConversionStats_5726034613"
+  convNamesTest: dbt_utils.get_column_values(var(stg_google_ads_transfer_adGroupConv), "Devices") %}
+  convNames: ['"Obrigado Pré GT"', '"Obrigado - Ebook Opções"', '"Blog de Lançamento Adws FEB/20"', '"Views RMKT ADWS AGT"', '"Views Página de Pagamento (VV)"']
+  convTypes: ['"Signup"', '"Lead"', '"View of a key page"']
+  convDevices: ['"CONNECTED_TV"', '"DESKTOP"', '"HIGH_END_MOBILE"', '"TABLET"']
+  ads_campaigns_only: false
 
   stg_segment_events_id-prefix: segment-
   stg_segment_events_etl: segment

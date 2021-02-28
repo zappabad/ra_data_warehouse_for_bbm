@@ -29,3 +29,21 @@ sources:
       - name: ad_performance_reports
       - name: ad_groups
       - name: ads
+  - name: transfer_google_ads
+    database: "{{var('stg_google_ads_transfer_database')}}"
+    schema: "{{var('stg_google_ads_transfer_schema')}}"
+
+    freshness:
+      warn_after: {count: 1, period: day}
+
+    loaded_at_field: uuid_ts    
+
+    tables:
+      - name: p_CampaignStats_5726034613
+      - name: p_Campaign_5726034613
+      - name: p_Ad_5726034613
+      - name: p_AdBasicStats_5726034613
+      - name: p_CampaignConversionStats_5726034613
+      - name: p_AdGroupStats_5726034613
+      - name: p_AdGroup_5726034613
+      - name: p_AdGroupConversionStats_5726034613

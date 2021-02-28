@@ -7,7 +7,8 @@
 {% if 'google_ads' in var("marketing_warehouse_ad_performance_sources") %}
 
 
-WITH campaignBase AS (SELECT /* Antigo stg_campaignBase.sql    cb */
+WITH campaignBase AS (
+SELECT /* Antigo stg_campaignBase.sql    cb */
 campaignId,
 externalCustomerId,
 Date,
@@ -17,21 +18,27 @@ Date,
 sum(clicks) Clicks, 
 {{gads_cost()}}
 FROM {{var('stg_google_ads_transfer_campaignStats')}}
-GROUP BY 1,2,3,4,5,6),
+GROUP BY 1,2,3,4,5,6
+),
 
 
-campaignLookup AS (SELECT   /* Antigo stg_campaignLookup.sql     cm*/
+adgroupLookup AS (
+SELECT   /* Antigo stg_campaignLookup.sql     cm*/
 campaignId, 
-cName campaignName
+cName AdGroupName
 FROM (SELECT 
 campaignId, 
-LAST_VALUE(campaignName) OVER(PARTITION BY campaignId order by _PARTITIONTIME asc ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) cName
-FROM {{var('stg_google_ads_transfer_campaignStats')}}
-GROUP BY 1, _partitiontime, campaignName)
+AdGroupId,
+AdGroupName,
+LAST_VALUE(AdGroupName) OVER(PARTITION BY AdGroupId order by _PARTITIONTIME asc ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) cName
+FROM {{var('stg_google_ads_transfer_adGroup')}}
+GROUP BY 1, _partitiontime, AdGroupName, AdGroupId, CampaignId)
 GROUP BY 1, 2
-ORDER BY 1 DESC),
+ORDER BY 1 DESC
+),
 
-campaignImpressions AS (SELECT   /* im */ 
+campaignImpressions AS (
+SELECT   /* im */ 
 campaignId, 
 externalCustomerId,
 Date,
@@ -39,57 +46,13 @@ Date,
 {{gads_extract('month')}},
 {{gads_extract('year')}},
 sum(Impressions) impr
-FROM {{var('stg_google_ads_transfer_campaignStats')}}  /* de t_campaignStats para stg_google_ads_transfer_campaignStats*/
+FROM {{var('stg_google_ads_transfer_adGroupStats')}}  /* de t_campaignStats para stg_google_ads_transfer_campaignStats*/
 WHERE clickType = "URL_CLICKS"
-GROUP BY 1,2,3,4,5,6),
+GROUP BY 1,2,3,4,5,6
+),
 
-campaignConversions AS (SELECT /* Antigo stg_campaignConversions    cc */
-campaignId, 
-externalCustomerId,
-Date,
-{{gads_extract('ISOWEEK')}},
-{{gads_extract('month')}},
-{{gads_extract('year')}},
-SUM(Conversions) Conversions,
-SUM(CASE WHEN ConversionTypeName = {{var('convName1')}} THEN Conversions ELSE 0 END) as conv_obrigado,
-SUM(CASE WHEN ConversionTypeName = {{var('convName2')}} THEN Conversions ELSE 0 END) as conv_blog,
-WITH campaignBase AS (SELECT /* Antigo stg_campaignBase.sql    cb */
-campaignId,
-externalCustomerId,
-Date,
-{{gads_extract('ISOWEEK')}},
-{{gads_extract('month')}},
-{{gads_extract('year')}},
-sum(clicks) Clicks, 
-{{cost()}}
-FROM {{var('stg_google_ads_transfer_campaignStats')}}
-GROUP BY 1,2,3,4,5,6),
-
-
-campaignLookup AS (SELECT   /* Antigo stg_campaignLookup.sql     cm*/
-campaignId, 
-cName campaignName
-FROM (SELECT 
-campaignId, 
-LAST_VALUE(campaignName) OVER(PARTITION BY campaignId order by _PARTITIONTIME asc ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) cName
-FROM {{var('stg_google_ads_transfer_campaignStats')}}
-GROUP BY 1, _partitiontime, campaignName)
-GROUP BY 1, 2
-ORDER BY 1 DESC),
-
-campaignImpressions AS (SELECT   /* im */ 
-campaignId, 
-externalCustomerId,
-Date,
-{{gads_extract('ISOWEEK')}},
-{{gads_extract('month')}},
-{{gads_extract('year')}},
-sum(Impressions) impr
-FROM {{var('stg_google_ads_transfer_campaignStats')}}  /* de t_campaignStats para stg_google_ads_transfer_campaignStats*/
-WHERE clickType = "URL_CLICKS"
-GROUP BY 1,2,3,4,5,6),
-
-campaignConversions AS (SELECT /* Antigo stg_campaignConversions    cc */
+campaignConversions AS (
+SELECT /* Antigo stg_campaignConversions    cc */
 campaignId, 
 externalCustomerId,
 Date,
@@ -100,8 +63,9 @@ SUM(Conversions) Conversions,
 SUM(CASE WHEN ConversionTypeName = {{var('convName1')}} THEN Conversions ELSE 0 END) as conv_obrigado,
 SUM(CASE WHEN ConversionTypeName = {{var('convName2')}} THEN Conversions ELSE 0 END) as conv_blog,
 SUM(CASE WHEN ConversionTypeName = {{var('convName3')}} THEN Conversions ELSE 0 END) as conv_ebook
-FROM {{var('stg_google_ads_transfer_t_campaignConv')}}  /* De t_campaignConv para stg_google_ads_transfer_t_campaignConv*/
-GROUP BY 1,2,3,4,5,6) 
+FROM {{var('stg_google_ads_transfer_campaignConv')}}  /* De t_campaignConv para stg_google_ads_transfer_campaignConv*/
+GROUP BY 1,2,3,4,5,6
+)
 
 
 SELECT
@@ -117,7 +81,7 @@ cc.conv_ebook,
 (sum(cc.Conversions) / sum(NULLIF(cb.clicks,0))) convRate,
 (sum(cb.Cost) / sum(NULLIF(cc.Conversions, 0))) costPerConv
 FROM campaignBase cb
-JOIN campaignLookup cm
+JOIN adgroupLookup cm
 ON cb.campaignId = cm.campaignId
 JOIN campaignImpressions im
 ON cb.campaignId = im.campaignId 
