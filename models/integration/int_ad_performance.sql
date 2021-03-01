@@ -19,7 +19,7 @@ select * from ad_performance
 
 {{
     config(
-        enabled=false
+        enabled=true
     )
 }}
 

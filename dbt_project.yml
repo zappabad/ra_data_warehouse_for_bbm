@@ -41,6 +41,7 @@ models:
       utils:
           materialized: table
           schema: logs
+    
 
 # seeds (reference files, loaded into tables) module settings
 seeds:
@@ -82,7 +83,7 @@ vars:
   stg_looker_usage_schema:
   stg_looker_usage_stats_table:
 
-  stg_facebook_ads_id-prefix: facebook_ads
+  stg_facebook_ads_id-prefix: fbads-
   stg_facebook_ads_etl: stitch
   stg_facebook_ads_stitch_database: 
   stg_facebook_ads_stitch_schema: fbads_goes
@@ -100,20 +101,20 @@ vars:
   stg_facebook_ads_segment_campaigns_table: "{{ source('segment_facebook_ads', 'campaigns') }}"
 
   stg_google_ads_id-prefix: gads-
-  stg_google_ads_etl: stitch
+  stg_google_ads_etl: transfer
   stg_google_ads_stitch_database:
   stg_google_ads_stitch_schema: stitch_google_ads
   stg_google_ads_stitch_campaign_performance_table: "{{ source('stitch_google_ads', 'CAMPAIGN_PERFORMANCE_REPORT') }}"
   stg_google_ads_stitch_campaigns_table: "{{ source('stitch_google_ads', 'campaigns') }}"
   stg_google_ads_segment_database:
-  stg_google_ads_segment_schema: google_ads
+  stg_google_ads_segment_schema: segment_google_ads
   stg_google_ads_segment_campaign_performance_table: "{{ source('segment_google_ads', 'campaign_performance_reports') }}"
   stg_google_ads_segment_ad_performance_table: "{{ source('segment_google_ads', 'ad_performance_reports') }}"
   stg_google_ads_segment_ad_groups_table: "{{ source('segment_google_ads', 'ad_groups') }}"
   stg_google_ads_segment_ads_table: "{{ source('segment_google_ads', 'ads') }}"
   stg_google_ads_segment_campaigns_table: "{{ source('segment_google_ads', 'campaigns') }}"
-  stg_google_ads_transfer_database: gads_goes
-  stg_google_ads_transfer_schema: transfer_google_ads
+  stg_google_ads_transfer_database: 
+  stg_google_ads_transfer_schema: gads_goes
   stg_google_ads_transfer_campaignStats: "databases-297008.gads_goes.p_CampaignStats_5726034613"
   stg_google_ads_transfer_campaign: "databases-297008.gads_goes.p_Campaign_5726034613"
   stg_google_ads_transfer_ads: "databases-297008.gads_goes.p_Ad_5726034613"
@@ -121,12 +122,8 @@ vars:
   stg_google_ads_transfer_campaignConv: "databases-297008.gads_goes.p_CampaignConversionStats_5726034613"
   stg_google_ads_transfer_adGroupStats: "databases-297008.gads_goes.p_AdGroupStats_5726034613"
   stg_google_ads_transfer_adGroup: "databases-297008.gads_goes.p_AdGroup_5726034613"
-  stg_google_ads_transfer_adGroupConv: "databases-297008.gads_goes.p_AdGroupConversionStats_5726034613"
-  convNamesTest: dbt_utils.get_column_values(var(stg_google_ads_transfer_adGroupConv), "Devices") %}
-  convNames: ['"Obrigado Pré GT"', '"Obrigado - Ebook Opções"', '"Blog de Lançamento Adws FEB/20"', '"Views RMKT ADWS AGT"', '"Views Página de Pagamento (VV)"']
-  convTypes: ['"Signup"', '"Lead"', '"View of a key page"']
-  convDevices: ['"CONNECTED_TV"', '"DESKTOP"', '"HIGH_END_MOBILE"', '"TABLET"']
-  ads_campaigns_only: false
+  stg_google_ads_transfer_adGroupConv: "{{ source('transfer_google_ads', 'p_AdGroupConversionStats_5726034613') }}"
+  ads_campaigns_only: False
 
   stg_segment_events_id-prefix: segment-
   stg_segment_events_etl: segment
